@@ -21,7 +21,6 @@ class _PlaylistState extends State<Playlist> {
             Positioned(
               left: 0,
               right: 0,
-              top: Heights * .1,
               height: Heights,
               child: Container(
                 child: Center(

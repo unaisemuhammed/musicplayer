@@ -21,7 +21,6 @@ class _FolderState extends State<Folder> {
             Positioned(
               left: 0,
               right: 0,
-              top: Heights * .1,
               height: Heights,
               child: Container(
                 decoration: BoxDecoration(

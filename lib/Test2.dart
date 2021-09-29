@@ -9,52 +9,51 @@ class Test2 extends StatefulWidget {
 }
 
 class _Test2State extends State<Test2> {
-  List Title = ["Playlist", "Track", "Favourite", "Favourite", "Favourite"];
-
-  Widget _buildItemList(BuildContext context, int index) {
-    if (index == Title.length)
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    return Column(
-      children: [
-        Container(
-          color: Colors.red,
-          width: 150,
-          height: 40,
-          child: Center(
-            child: Text(
-              "${Title[index]}",
-              style: TextStyle(fontSize: 25, color: Colors.white),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Container(
-          height: 40,
-          color: Colors.green,
-          child: Column(
-            children: [
-              Expanded(
-                child: ScrollSnapList(
-                  itemBuilder: _buildItemList,
-                  itemSize: 150,
-                  dynamicItemSize: true,
-                  itemCount: Title.length,
-                  onItemFocus: (int) {},
+      backgroundColor: Colors.white,
+      body: Stack(children: [
+        Positioned(
+          child: Center(
+              child: Text(
+            "UNAIse",
+            style: TextStyle(fontSize: 50),
+          )),
+        ),
+
+
+
+
+        Positioned(
+          child: ColorFiltered(
+            colorFilter:
+                ColorFilter.mode(Colors.blueAccent, BlendMode.srcOut),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Positioned(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.black,
+                        backgroundBlendMode: BlendMode.srcIn), // This one will handle background + difference out
+                  ),
                 ),
-              )
-            ],
+                Container(
+                  margin: const EdgeInsets.only(top: 200),
+                  decoration: BoxDecoration(
+                    color: Colors.brown,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(50),
+                      topLeft: Radius.circular(50),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
+      ]),
     );
   }
 }
