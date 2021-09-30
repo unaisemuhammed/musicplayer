@@ -16,29 +16,75 @@ class _FolderState extends State<Folder> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.back,
-        body: Stack(
-          children: [
-            Positioned(
-              left: 0,
-              right: 0,
-              height: Heights,
-              child: Container(
-                decoration: BoxDecoration(
-                    // color: AppColors.shade,
-                    color: AppColors.shade),
-                height: Heights,
-                width: Weights,
+        body: Container(
+          child: ListView(
+            children: [
+              ListTile(
+                // dense: true,
+                leading: Container(
+                  child: Icon(
+                    Icons.folder_open,
+                    size: 30,
+                    color: Colors.grey,
+                  ),
+                  decoration: BoxDecoration(
+                      color: AppColors.back,
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(10)),
+                  width: Weights / 8,
+                  height: Heights / 14,
+                ),
+                title: Text(
+                  "Internal Storage",
+                  style: TextStyle(color: Colors.white, fontSize: 17),
+                  overflow: TextOverflow.ellipsis,maxLines: 1,
+                ),subtitle: Text(
+                "/InternalStorage",
+                style: TextStyle(color: Colors.grey),
+                overflow: TextOverflow.ellipsis,maxLines: 1,
               ),
-            ),
-
-            // Positioned(
-            //     top: Heights * .1,
-            //     child: Container(
-            //       height: 100,
-            //       width: 200,
-            //       color: Colors.red,
-            //     ))
-          ],
+              ),
+              Divider(
+                height: 0,
+                indent: 85,
+                color: Colors.grey,
+              ),    ListTile(
+                // dense: true,
+                leading: Container(
+                  child: Icon(
+                    Icons.folder_open,
+                    size: 30,
+                    color: Colors.grey,
+                  ),
+                  decoration: BoxDecoration(
+                      color: AppColors.back,
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(10)),
+                  width: Weights / 8,
+                  height: Heights / 14,
+                ),
+                title: Text(
+                  "WhatsApp Audio",
+                  style: TextStyle(color: Colors.white, fontSize: 17),
+                  overflow: TextOverflow.ellipsis,maxLines: 1,
+                ),subtitle: Text(
+                "InternalStorage/Whatsapp/Media/WhatsAppAudio",
+                overflow: TextOverflow.ellipsis,maxLines: 1,
+                style: TextStyle(color: Colors.grey),
+              ),
+              ),
+              Divider(
+                height: 0,
+                indent: 85,
+                color: Colors.grey,
+              ),
+            ],
+          ),
+          decoration: BoxDecoration(
+              // color: AppColors.shade,
+              color: AppColors.shade),
+          height: Heights,
+          width: Weights,
         ),
       ),
     );

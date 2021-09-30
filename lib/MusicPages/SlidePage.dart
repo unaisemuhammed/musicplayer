@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 import 'package:musicplayer/MusicPages/SettingsPage.dart';
@@ -37,6 +38,7 @@ class _SlidePageState extends State<SlidePage> {
           backgroundColor: AppColors.back,
           appBar: AppBar(
             bottom: TabBar(
+              dragStartBehavior: DragStartBehavior.down,
               tabs: [
                 Tab(text: "Playlist",),
                 Tab(

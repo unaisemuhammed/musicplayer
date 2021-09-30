@@ -16,24 +16,140 @@ class _PlaylistState extends State<Playlist> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.back,
-        body: Stack(
-          children: [
-            Positioned(
-              left: 0,
-              right: 0,
-              height: Heights,
-              child: Container(
-                child: Center(
-                  child: Text("Create some playlists,and they'll appear here.",style: TextStyle(color: Colors.grey),),
-                ),
-                decoration: BoxDecoration(
-                    // color:AppColors.shade,
-                    color: AppColors.shade),
-                height: Heights,
-                width: Weights,
+        body: Container(
+          padding: EdgeInsets.all(15),
+          child: GridView.count(
+            mainAxisSpacing: 15,
+            crossAxisSpacing: 30,
+            crossAxisCount: 3,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    height: Heights / 8,
+                    width: Weights,
+                    child: Icon(
+                      Icons.music_note_outlined,
+                      size: 60,
+                      color: Colors.grey,
+                    ),
+                    decoration: BoxDecoration(
+                        color: AppColors.back,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  Text(
+                    "English Song",
+                    style: TextStyle(color: Colors.white, fontSize: 17),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ],
               ),
-            ),
-          ],
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    height: Heights / 8,
+                    width: Weights,
+                    child: Icon(
+                      Icons.music_note_outlined,
+                      size: 60,
+                      color: Colors.grey,
+                    ),
+                    decoration: BoxDecoration(
+                        color: AppColors.back,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  Text(
+                    "My Favourite",
+                    style: TextStyle(color: Colors.white, fontSize: 17),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    height: Heights / 8,
+                    width: Weights,
+                    child: Icon(
+                      Icons.music_note_outlined,
+                      size: 60,
+                      color: Colors.grey,
+                    ),
+                    decoration: BoxDecoration(
+                        color: AppColors.back,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  Text(
+                    "Hindi Song",
+                    style: TextStyle(color: Colors.white, fontSize: 17),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    height: Heights / 8,
+                    width: Weights,
+                    child: Icon(
+                      Icons.music_note_outlined,
+                      size: 60,
+                      color: Colors.grey,
+                    ),
+                    decoration: BoxDecoration(
+                        color: AppColors.back,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  Text(
+                    "Liked Song",
+                    style: TextStyle(color: Colors.white, fontSize: 17),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    height: Heights / 8,
+                    width: Weights,
+                    child: Icon(
+                      Icons.music_note_outlined,
+                      size: 60,
+                      color: Colors.grey,
+                    ),
+                    decoration: BoxDecoration(
+                        color: AppColors.back,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  Text(
+                    "Selected Song",
+                    style: TextStyle(color: Colors.white, fontSize: 17),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          decoration: BoxDecoration(
+              // color:AppColors.shade,
+              color: AppColors.shade),
+          height: Heights,
+          width: Weights,
         ),
       ),
     );
