@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:musicplayer/Test2.dart';
 import 'MusicPages/SlidePage.dart';
 import 'package:musicplayer/colors.dart' as AppColors;
 
-import 'Testing.dart';
 
 void main() {
   runApp(MyApp());

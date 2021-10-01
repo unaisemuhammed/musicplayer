@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:marquee/marquee.dart';
 import 'package:musicplayer/colors.dart' as AppColors;
 
@@ -16,10 +18,24 @@ class _MusicControllState extends State<MusicControll> {
   int shuffle = 0;
   int repeat = 0;
 
+  late AudioPlayer player;
+
+  @override
+  void initState() {
+    super.initState();
+    player = AudioPlayer();
+  }
+
+  @override
+  void dispose() {
+    player.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final double Heights = MediaQuery.of(context).size.height;
-    final double Weights = MediaQuery.of(context).size.width;
+    final double Height = MediaQuery.of(context).size.height;
+    final double Width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -34,18 +50,6 @@ class _MusicControllState extends State<MusicControll> {
                   fontWeight: FontWeight.bold),
             ),
           ),
-          actions: [
-            // Padding(
-            //   padding: EdgeInsets.only(right:Weights/10,top:20),
-            //   child: Text(
-            //     "TUNE " "Ax",
-            //     style: TextStyle(
-            //         fontSize: 25,
-            //         fontFamily: 'Gemunu',
-            //         fontWeight: FontWeight.bold),
-            //   ),
-            // ),
-          ],
           elevation: 0,
           backgroundColor: AppColors.back,
           leading: IconButton(
@@ -62,88 +66,70 @@ class _MusicControllState extends State<MusicControll> {
         backgroundColor: AppColors.back,
         body: Stack(
           children: [
+            ///Play $ Pause///
+            ///Play $ Pause///
             Positioned(
-              top: Heights - 200,
+              top: Height - 200,
               child: Container(
-                width: Weights,
+                width: Width,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    ///Last Play Container///
                     IconButton(
-                      iconSize: 25,
-                      color: Colors.white,
-                      onPressed: () {
-                        setState(() {
-                          shuffle == 0 ? shuffle = 1 : shuffle = 0;
-                        });
-                      },
-                      icon: shuffle == 0
-                          ? Icon(Icons.shuffle)
-                          : Icon(
-                              Icons.shuffle,
-                              color: Colors.cyanAccent,
-                            ),
-                    ),
-                    // SizedBox(
-                    //   width: 20,
-                    // ),
+                        iconSize: 25,
+                        color: Colors.white,
+                        onPressed: () {},
+                        icon: Icon(Icons.shuffle)),
                     IconButton(
                       iconSize: 35,
                       color: Colors.white,
                       onPressed: () {},
                       icon: Icon(Icons.skip_previous_sharp),
                     ),
-                    // SizedBox(
-                    //   width: 30,
-                    // ),
                     IconButton(
                       iconSize: 35,
                       color: Colors.white,
-                      onPressed: () {
-                        setState(() {
-                          play == 0 ? play = 1 : play = 0;
-                        });
+                      onPressed: () async {
+                        if (play == 0) {
+                          await player.setAsset('Assets/Selena2.mp3');
+                          player.play();
+                          setState(() {
+                            play = 1;
+                          });
+                        } else if (play == 1) {
+                          player.pause();
+                          setState(() {
+                            play = 0;
+                          });
+                        }
                       },
-                      icon: play == 0
-                          ? Icon(Icons.play_arrow)
-                          : Icon(Icons.pause),
+                      icon: play == 1
+                          ? Icon(Icons.pause)
+                          : Icon(Icons.play_arrow),
                     ),
-                    // SizedBox(
-                    //   width: 30,
-                    // ),
                     IconButton(
                       iconSize: 35,
                       color: Colors.white,
                       onPressed: () {},
                       icon: Icon(Icons.skip_next),
                     ),
-                    // SizedBox(
-                    //   width: 20,
-                    // ),
                     IconButton(
                       iconSize: 25,
                       color: Colors.white,
-                      onPressed: () {
-                        setState(() {
-                          repeat == 0 ? repeat = 1 : repeat = 0;
-                        });
-                      },
-                      icon: repeat == 0
-                          ? Icon(Icons.repeat_one)
-                          : Icon(
-                              Icons.repeat,
-                            ),
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.repeat,
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
 
-            ///Seak container///
+            ///Slider///
             Positioned(
-              width: Weights,
-              top: Heights - 258,
+              width: Width,
+              top: Height - 258,
               child: Slider(
                   activeColor: Colors.white,
                   min: .5,
@@ -156,10 +142,12 @@ class _MusicControllState extends State<MusicControll> {
             ),
 
             ///Favourite Container///
+            ///Favourite Container///
+            ///Favourite Container///
             Positioned(
-              top: Heights - 320,
+              top: Height - 320,
               child: Container(
-                width: Weights,
+                width: Width,
                 // color: Colors.red,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -198,23 +186,34 @@ class _MusicControllState extends State<MusicControll> {
                 ),
               ),
             ),
+
+            ///subtitle///
+            ///subtitle///
+            ///subtitle///
             Positioned(
               right: 100,
               left: 100,
-              top: Heights / 3,
+              top: Height / 3,
               child: Container(
                 child: Center(
-                  child: Text("Selena Gomez",style: TextStyle(
-                      color: Colors.grey, fontSize: 22, fontFamily: "Titil"),),
+                  child: Text(
+                    "Selena Gomez",
+                    style: TextStyle(
+                        color: Colors.grey, fontSize: 22, fontFamily: "Titil"),
+                  ),
                 ),
                 height: 100,
-                width: Weights,
+                width: Width,
               ),
             ),
+
+            ///Song Title///
+            ///Song Title///
+            ///Song Title///
             Positioned(
               right: 20,
               left: 20,
-              top: Heights/3,
+              top: Height / 3,
               child: Container(
                 height: 25,
                 child: Center(
@@ -228,22 +227,29 @@ class _MusicControllState extends State<MusicControll> {
                 ),
               ),
             ),
+
+            ///Icon $ Images///
+            ///Icon $ Images///
+            ///Icon $ Images///
             Positioned(
               right: 100,
               left: 100,
-              top: Heights / 15,
-              child: Container(
+              top: Height / 25,
+              child: CircleAvatar(
+                radius: 105,
+                backgroundColor: AppColors.shade,
                 child: Icon(
                   Icons.music_note_outlined,
-                  size: 150,
-                  color: Colors.grey,
+                  size: 100,
                 ),
-                height: Heights / 4,
-                width: Weights / 4,
-                decoration: BoxDecoration(
-                    color: AppColors.shade,
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(30)),
+                // child: ClipOval(
+                //   child: Image.asset(
+                //     "Assets/Selena-Gomez-640x514.jpg",
+                //     fit: BoxFit.cover,
+                //     height: Height,
+                //     width: Width,
+                //   ),
+                // ),
               ),
             ),
           ],

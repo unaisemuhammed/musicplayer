@@ -20,7 +20,7 @@ class _PlaylistState extends State<Playlist> {
           padding: EdgeInsets.all(15),
           child: GridView.count(
             mainAxisSpacing: 15,
-            crossAxisSpacing: 30,
+            crossAxisSpacing: 20,
             crossAxisCount: 3,
             children: [
               Column(
