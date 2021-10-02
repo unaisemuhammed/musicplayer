@@ -1,15 +1,15 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
+import 'package:musicplayer/MusicPages/MusicControllPage.dart';
 import 'package:musicplayer/MusicPages/SettingsPage.dart';
 import 'FavouritePage.dart';
 import 'FolderPage.dart';
-import 'MusicControllPage.dart';
 import 'PlaylistPage.dart';
 import 'SearchPage.dart';
 import 'TrackPage.dart';
 import 'package:musicplayer/colors.dart' as AppColors;
-import 'package:scroll_snap_list/scroll_snap_list.dart';
+
 
 var _pages = [Playlist(), Track(), Favourite(), Folder()];
 List Title = ["Playlist", "Track", "Favourite", "Folder"];
@@ -24,8 +24,9 @@ class SlidePage extends StatefulWidget {
 class _SlidePageState extends State<SlidePage> {
   int play = 0;
   int favourite = 0;
-
   TextEditingController playlistController = TextEditingController();
+
+  get player => null;
 
   @override
   Widget build(BuildContext context) {
@@ -229,19 +230,28 @@ class _SlidePageState extends State<SlidePage> {
                           onPressed: () {},
                           icon: Icon(Icons.skip_previous_sharp),
                         ),
-                        IconButton(
-                          iconSize: 30,
-                          alignment: Alignment.centerRight,
-                          color: Colors.white,
-                          onPressed: () {
-                            setState(() {
-                              play == 0 ? play = 1 : play = 0;
-                            });
-                          },
-                          icon: play == 0
-                              ? Icon(Icons.play_arrow)
-                              : Icon(Icons.pause),
-                        ),
+                    IconButton(
+                      iconSize: 30,
+                      alignment: Alignment.centerRight,
+                      color: Colors.white,
+                      onPressed: () async {
+                        if (play == 0) {
+                          await player.setAsset('Assets/Selena2.mp3');
+                          player.play();
+                          setState(() {
+                            play = 1;
+                          });
+                        } else if (play == 1) {
+                          player.pause();
+                          setState(() {
+                            play = 0;
+                          });
+                        }
+                      },
+                      icon: play == 1
+                          ? Icon(Icons.pause)
+                          : Icon(Icons.play_arrow),
+                    ),
                         IconButton(
                           iconSize: 30,
                           alignment: Alignment.centerRight,

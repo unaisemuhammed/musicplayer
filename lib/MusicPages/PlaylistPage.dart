@@ -17,17 +17,17 @@ class _PlaylistState extends State<Playlist> {
       child: Scaffold(
         backgroundColor: AppColors.back,
         body: Container(
-          padding: EdgeInsets.all(15),
+          padding: EdgeInsets.all(20),
           child: GridView.count(
             mainAxisSpacing: 15,
             crossAxisSpacing: 20,
             crossAxisCount: 3,
             children: [
               Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
-                    height: Heights / 8,
+                    height: Heights / 10,
                     width: Weights,
                     child: Icon(
                       Icons.music_note_outlined,
@@ -41,7 +41,7 @@ class _PlaylistState extends State<Playlist> {
                   ),
                   Text(
                     "English Song",
-                    style: TextStyle(color: Colors.white, fontSize: 17),
+                    style: TextStyle(color: Colors.white, fontSize: 17,fontFamily: "Titil"),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
@@ -51,7 +51,7 @@ class _PlaylistState extends State<Playlist> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Container(
-                    height: Heights / 8,
+                    height: Heights / 10,
                     width: Weights,
                     child: Icon(
                       Icons.music_note_outlined,
@@ -65,7 +65,7 @@ class _PlaylistState extends State<Playlist> {
                   ),
                   Text(
                     "My Favourite",
-                    style: TextStyle(color: Colors.white, fontSize: 17),
+                    style: TextStyle(color: Colors.white, fontSize: 17,fontFamily: "Titil"),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
@@ -75,7 +75,7 @@ class _PlaylistState extends State<Playlist> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Container(
-                    height: Heights / 8,
+                    height: Heights /10,
                     width: Weights,
                     child: Icon(
                       Icons.music_note_outlined,
@@ -89,7 +89,7 @@ class _PlaylistState extends State<Playlist> {
                   ),
                   Text(
                     "Hindi Song",
-                    style: TextStyle(color: Colors.white, fontSize: 17),
+                    style: TextStyle(color: Colors.white, fontSize: 17,fontFamily: "Titil"),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
@@ -99,7 +99,7 @@ class _PlaylistState extends State<Playlist> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Container(
-                    height: Heights / 8,
+                    height: Heights /10,
                     width: Weights,
                     child: Icon(
                       Icons.music_note_outlined,
@@ -113,7 +113,7 @@ class _PlaylistState extends State<Playlist> {
                   ),
                   Text(
                     "Liked Song",
-                    style: TextStyle(color: Colors.white, fontSize: 17),
+                    style: TextStyle(color: Colors.white, fontSize: 17,fontFamily: "Titil"),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
@@ -123,7 +123,7 @@ class _PlaylistState extends State<Playlist> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Container(
-                    height: Heights / 8,
+                    height: Heights /10,
                     width: Weights,
                     child: Icon(
                       Icons.music_note_outlined,
@@ -137,7 +137,7 @@ class _PlaylistState extends State<Playlist> {
                   ),
                   Text(
                     "Selected Song",
-                    style: TextStyle(color: Colors.white, fontSize: 17),
+                    style: TextStyle(color: Colors.white, fontSize: 17,fontFamily: "Titil"),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),

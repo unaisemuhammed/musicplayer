@@ -5,37 +5,59 @@ import 'package:just_audio/just_audio.dart';
 import 'package:marquee/marquee.dart';
 import 'package:musicplayer/colors.dart' as AppColors;
 
+import 'SlidePage.dart';
+
 class MusicControll extends StatefulWidget {
   const MusicControll({Key? key}) : super(key: key);
 
   @override
   _MusicControllState createState() => _MusicControllState();
 }
-
+late AudioPlayer player;
 class _MusicControllState extends State<MusicControll> {
+  Duration position = new Duration();
+  Duration duration = new Duration();
+
+  // void seekTosec(int sec){
+  //   Duration newPos= Duration(seconds: sec);
+  //   player.seek(newPos);
+  // }
   int play = 0;
   int favourite = 0;
   int shuffle = 0;
   int repeat = 0;
 
-  late AudioPlayer player;
+
 
   @override
   void initState() {
     super.initState();
     player = AudioPlayer();
+    player.durationStream.listen((d) {
+      setState(() {
+        duration = d!;
+      });
+    });
+    player.positionStream.listen((p) {
+      setState(() {
+        position = p;
+      });
+    });
   }
 
-  @override
-  void dispose() {
-    player.dispose();
-    super.dispose();
-  }
+  final String path = "Assets/Selena2.mp3";
+
+  // @override
+  // void dispose() {
+  //   player.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
     final double Height = MediaQuery.of(context).size.height;
     final double Width = MediaQuery.of(context).size.width;
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -69,7 +91,7 @@ class _MusicControllState extends State<MusicControll> {
             ///Play $ Pause///
             ///Play $ Pause///
             Positioned(
-              top: Height - 200,
+              top: Height - 180,
               child: Container(
                 width: Width,
                 child: Row(
@@ -91,7 +113,7 @@ class _MusicControllState extends State<MusicControll> {
                       color: Colors.white,
                       onPressed: () async {
                         if (play == 0) {
-                          await player.setAsset('Assets/Selena2.mp3');
+                          await player.setAsset(path);
                           player.play();
                           setState(() {
                             play = 1;
@@ -127,18 +149,44 @@ class _MusicControllState extends State<MusicControll> {
             ),
 
             ///Slider///
+            ///Slider///
+            ///Slider///
+            ///Slider///
             Positioned(
               width: Width,
               top: Height - 258,
-              child: Slider(
+              child: Slider.adaptive(
                   activeColor: Colors.white,
-                  min: .5,
-                  max: 5,
-                  label: "1",
-                  value: 1,
-                  onChanged: (context) {
-                    setState(() {});
+                  inactiveColor: Colors.white12,
+                  value: position.inSeconds.toDouble(),
+                  min: 0.0,
+                  max: duration.inSeconds.toDouble(),
+                  onChanged: (double value) {
+                    setState(() {
+                     changeToSecond(value.toInt());
+                      value = value;
+                    });
                   }),
+            ),
+
+            Positioned(
+              right: 15,
+              left: 15,
+              // width: Width,
+              top: Height - 215,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    position.toString().split(".")[0],
+                    style: TextStyle(fontSize: 15, color: Colors.white),
+                  ),
+                  Text(
+                    duration.toString().split(".")[0],
+                    style: TextStyle(fontSize: 15, color: Colors.white),
+                  ),
+                ],
+              ),
             ),
 
             ///Favourite Container///
@@ -240,7 +288,7 @@ class _MusicControllState extends State<MusicControll> {
                 backgroundColor: AppColors.shade,
                 child: Icon(
                   Icons.music_note_outlined,
-                  size: 100,
+                  size: 100,color: Colors.white,
                 ),
                 // child: ClipOval(
                 //   child: Image.asset(
@@ -257,4 +305,9 @@ class _MusicControllState extends State<MusicControll> {
       ),
     );
   }
+}
+
+void changeToSecond(int second) {
+  Duration newDuration=Duration(seconds: second);
+  player.seek(newDuration);
 }
