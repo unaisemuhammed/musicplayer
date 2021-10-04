@@ -1,11 +1,10 @@
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:marquee/marquee.dart';
+import 'package:musicplayer/PageManager.dart';
 import 'package:musicplayer/colors.dart' as AppColors;
-
-import 'SlidePage.dart';
 
 class MusicControll extends StatefulWidget {
   const MusicControll({Key? key}) : super(key: key);
@@ -13,45 +12,17 @@ class MusicControll extends StatefulWidget {
   @override
   _MusicControllState createState() => _MusicControllState();
 }
-late AudioPlayer player;
+
 class _MusicControllState extends State<MusicControll> {
-  Duration position = new Duration();
-  Duration duration = new Duration();
-
-  // void seekTosec(int sec){
-  //   Duration newPos= Duration(seconds: sec);
-  //   player.seek(newPos);
-  // }
-  int play = 0;
-  int favourite = 0;
-  int shuffle = 0;
-  int repeat = 0;
-
-
+  var _audioPlayer;
+  late final PageManger _pageManager;
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    player = AudioPlayer();
-    player.durationStream.listen((d) {
-      setState(() {
-        duration = d!;
-      });
-    });
-    player.positionStream.listen((p) {
-      setState(() {
-        position = p;
-      });
-    });
+    _pageManager = PageManger();
   }
-
-  final String path = "Assets/Selena2.mp3";
-
-  // @override
-  // void dispose() {
-  //   player.dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -108,26 +79,26 @@ class _MusicControllState extends State<MusicControll> {
                       onPressed: () {},
                       icon: Icon(Icons.skip_previous_sharp),
                     ),
-                    IconButton(
-                      iconSize: 35,
-                      color: Colors.white,
-                      onPressed: () async {
-                        if (play == 0) {
-                          await player.setAsset(path);
-                          player.play();
-                          setState(() {
-                            play = 1;
-                          });
-                        } else if (play == 1) {
-                          player.pause();
-                          setState(() {
-                            play = 0;
-                          });
+                    ValueListenableBuilder<ButtonState>(
+                      valueListenable: _pageManager.buttonNotifier,
+                      builder: (context, value, child) {
+                        switch (value) {
+                          case ButtonState.paused:
+                            return IconButton(
+                              iconSize: 35,
+                              color: Colors.white,
+                              onPressed: _pageManager.play,
+                              icon: Icon(Icons.play_arrow),
+                            );
+                          case ButtonState.playing:
+                            return IconButton(
+                              iconSize: 35,
+                              color: Colors.white,
+                              onPressed: _pageManager.pause,
+                              icon: Icon(Icons.pause),
+                            );
                         }
                       },
-                      icon: play == 1
-                          ? Icon(Icons.pause)
-                          : Icon(Icons.play_arrow),
                     ),
                     IconButton(
                       iconSize: 35,
@@ -139,9 +110,7 @@ class _MusicControllState extends State<MusicControll> {
                       iconSize: 25,
                       color: Colors.white,
                       onPressed: () {},
-                      icon: Icon(
-                        Icons.repeat,
-                      ),
+                      icon: Icon(Icons.repeat),
                     ),
                   ],
                 ),
@@ -153,40 +122,27 @@ class _MusicControllState extends State<MusicControll> {
             ///Slider///
             ///Slider///
             Positioned(
-              width: Width,
-              top: Height - 258,
-              child: Slider.adaptive(
-                  activeColor: Colors.white,
-                  inactiveColor: Colors.white12,
-                  value: position.inSeconds.toDouble(),
-                  min: 0.0,
-                  max: duration.inSeconds.toDouble(),
-                  onChanged: (double value) {
-                    setState(() {
-                     changeToSecond(value.toInt());
-                      value = value;
-                    });
+              right: 20,
+              left: 20,
+              top: Height - 242,
+              child: ValueListenableBuilder<ProgressBarState>(
+                  valueListenable: _pageManager.progressNotifier,
+                  builder: (BuildContext context, value, Widget? child) {
+                    return ProgressBar(
+                      onSeek: _pageManager.seek,
+                      progress: value.current,
+                      total: value.total,
+                      baseBarColor: Colors.grey,
+                      progressBarColor: Colors.white,
+                      thumbColor: Colors.white,
+                      barHeight: 3,
+                      timeLabelTextStyle: TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          height: 1.5,
+                          fontFamily: "Gemunu"),
+                    );
                   }),
-            ),
-
-            Positioned(
-              right: 15,
-              left: 15,
-              // width: Width,
-              top: Height - 215,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    position.toString().split(".")[0],
-                    style: TextStyle(fontSize: 15, color: Colors.white),
-                  ),
-                  Text(
-                    duration.toString().split(".")[0],
-                    style: TextStyle(fontSize: 15, color: Colors.white),
-                  ),
-                ],
-              ),
             ),
 
             ///Favourite Container///
@@ -203,8 +159,19 @@ class _MusicControllState extends State<MusicControll> {
                     IconButton(
                       iconSize: 30,
                       color: Colors.white,
-                      onPressed: () {},
-                      icon: Icon(Icons.volume_down_outlined),
+                      icon: Icon(Icons.volume_up),
+                      onPressed: () {
+                        showSliderDialog(
+                          context: context,
+                          title: "Adjust volume",
+                          divisions: 10,
+                          min: 0.0,
+                          max: 1.0,
+                          value: _audioPlayer.volume,
+                          stream: _audioPlayer.volumeStream,
+                          onChanged: _audioPlayer.setVolume,
+                        );
+                      },
                     ),
                     SizedBox(
                       width: 50,
@@ -212,14 +179,8 @@ class _MusicControllState extends State<MusicControll> {
                     IconButton(
                       iconSize: 25,
                       color: Colors.white,
-                      onPressed: () {
-                        setState(() {
-                          favourite == 0 ? favourite = 1 : favourite = 0;
-                        });
-                      },
-                      icon: favourite == 0
-                          ? Icon(Icons.favorite_border)
-                          : Icon(Icons.favorite),
+                      onPressed: () {},
+                      icon: Icon(Icons.favorite_border),
                     ),
                     SizedBox(
                       width: 50,
@@ -288,7 +249,8 @@ class _MusicControllState extends State<MusicControll> {
                 backgroundColor: AppColors.shade,
                 child: Icon(
                   Icons.music_note_outlined,
-                  size: 100,color: Colors.white,
+                  size: 100,
+                  color: Colors.white,
                 ),
                 // child: ClipOval(
                 //   child: Image.asset(
@@ -307,7 +269,44 @@ class _MusicControllState extends State<MusicControll> {
   }
 }
 
-void changeToSecond(int second) {
-  Duration newDuration=Duration(seconds: second);
-  player.seek(newDuration);
+void showSliderDialog({
+  required BuildContext context,
+  required String title,
+  required int divisions,
+  required double min,
+  required double max,
+  String valueSuffix = '',
+  // TODO: Replace these two by ValueStream.
+  required double value,
+  required Stream<double> stream,
+  required ValueChanged<double> onChanged,
+}) {
+  showDialog<void>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(title, textAlign: TextAlign.center),
+      content: StreamBuilder<double>(
+        stream: stream,
+        builder: (context, snapshot) => Container(
+          height: 100.0,
+          child: Column(
+            children: [
+              Text('${snapshot.data?.toStringAsFixed(1)}$valueSuffix',
+                  style: TextStyle(
+                      fontFamily: 'Fixed',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24.0)),
+              Slider(
+                divisions: divisions,
+                min: min,
+                max: max,
+                value: snapshot.data ?? value,
+                onChanged: onChanged,
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
 }

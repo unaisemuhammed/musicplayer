@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 import 'package:musicplayer/MusicPages/MusicControllPage.dart';
 import 'package:musicplayer/MusicPages/SettingsPage.dart';
+import 'package:musicplayer/PageManager.dart';
 import 'FavouritePage.dart';
 import 'FolderPage.dart';
 import 'PlaylistPage.dart';
@@ -22,11 +23,17 @@ class SlidePage extends StatefulWidget {
 }
 
 class _SlidePageState extends State<SlidePage> {
+
+  late PageManger _pageManager;
+  @override
+  void initState(){
+super.initState();
+_pageManager =PageManger();
+  }
+
   int play = 0;
   int favourite = 0;
   TextEditingController playlistController = TextEditingController();
-
-  get player => null;
 
   @override
   Widget build(BuildContext context) {
@@ -230,28 +237,27 @@ class _SlidePageState extends State<SlidePage> {
                           onPressed: () {},
                           icon: Icon(Icons.skip_previous_sharp),
                         ),
-                    IconButton(
-                      iconSize: 30,
-                      alignment: Alignment.centerRight,
-                      color: Colors.white,
-                      onPressed: () async {
-                        if (play == 0) {
-                          await player.setAsset('Assets/Selena2.mp3');
-                          player.play();
-                          setState(() {
-                            play = 1;
-                          });
-                        } else if (play == 1) {
-                          player.pause();
-                          setState(() {
-                            play = 0;
-                          });
-                        }
-                      },
-                      icon: play == 1
-                          ? Icon(Icons.pause)
-                          : Icon(Icons.play_arrow),
-                    ),
+                        ValueListenableBuilder<ButtonState>(
+                          valueListenable: _pageManager.buttonNotifier,
+                          builder: (context, value, child) {
+                            switch (value) {
+                              case ButtonState.paused:
+                                return IconButton(
+                                  iconSize: 30,
+                                  color: Colors.white,
+                                  onPressed: _pageManager.play,
+                                  icon: Icon(Icons.play_arrow),
+                                );
+                              case ButtonState.playing:
+                                return IconButton(
+                                  iconSize: 30,
+                                  color: Colors.white,
+                                  onPressed: _pageManager.pause,
+                                  icon: Icon(Icons.pause),
+                                );
+                            }
+                          },
+                        ),
                         IconButton(
                           iconSize: 30,
                           alignment: Alignment.centerRight,
