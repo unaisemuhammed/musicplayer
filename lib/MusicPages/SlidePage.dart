@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 import 'package:musicplayer/MusicPages/MusicControllPage.dart';
 import 'package:musicplayer/MusicPages/SettingsPage.dart';
-import 'package:musicplayer/PageManager.dart';
 import 'FavouritePage.dart';
 import 'FolderPage.dart';
 import 'PlaylistPage.dart';
 import 'SearchPage.dart';
 import 'TrackPage.dart';
 import 'package:musicplayer/colors.dart' as AppColors;
-
 
 var _pages = [Playlist(), Track(), Favourite(), Folder()];
 List Title = ["Playlist", "Track", "Favourite", "Folder"];
@@ -23,12 +21,9 @@ class SlidePage extends StatefulWidget {
 }
 
 class _SlidePageState extends State<SlidePage> {
-
-  late PageManger _pageManager;
   @override
-  void initState(){
-super.initState();
-_pageManager =PageManger();
+  void initState() {
+    super.initState();
   }
 
   int play = 0;
@@ -48,7 +43,9 @@ _pageManager =PageManger();
             bottom: TabBar(
               dragStartBehavior: DragStartBehavior.down,
               tabs: [
-                Tab(text: "Playlist",),
+                Tab(
+                  text: "Playlist",
+                ),
                 Tab(
                   text: "Track",
                 ),
@@ -58,10 +55,15 @@ _pageManager =PageManger();
                 Tab(
                   text: "Folder",
                 ),
-              ],indicatorColor:Colors.white70,
+              ],
+              indicatorColor: Colors.white70,
               unselectedLabelColor: Colors.white60,
-              unselectedLabelStyle: TextStyle(fontSize: 16,fontFamily: "Titil"),
-              labelStyle: TextStyle(fontSize: 18,fontFamily: "Titil",fontWeight: FontWeight.w500),
+              unselectedLabelStyle:
+                  TextStyle(fontSize: 16, fontFamily: "Titil"),
+              labelStyle: TextStyle(
+                  fontSize: 18,
+                  fontFamily: "Titil",
+                  fontWeight: FontWeight.w500),
             ),
             toolbarHeight: 110,
             elevation: 0,
@@ -237,26 +239,11 @@ _pageManager =PageManger();
                           onPressed: () {},
                           icon: Icon(Icons.skip_previous_sharp),
                         ),
-                        ValueListenableBuilder<ButtonState>(
-                          valueListenable: _pageManager.buttonNotifier,
-                          builder: (context, value, child) {
-                            switch (value) {
-                              case ButtonState.paused:
-                                return IconButton(
-                                  iconSize: 30,
-                                  color: Colors.white,
-                                  onPressed: _pageManager.play,
-                                  icon: Icon(Icons.play_arrow),
-                                );
-                              case ButtonState.playing:
-                                return IconButton(
-                                  iconSize: 30,
-                                  color: Colors.white,
-                                  onPressed: _pageManager.pause,
-                                  icon: Icon(Icons.pause),
-                                );
-                            }
-                          },
+                        IconButton(
+                          iconSize: 30,
+                          color: Colors.white,
+                          onPressed: () {},
+                          icon: Icon(Icons.play_arrow),
                         ),
                         IconButton(
                           iconSize: 30,
@@ -295,7 +282,7 @@ _pageManager =PageManger();
                 top: Heights / 2000,
                 right: 0,
                 left: 0,
-                height: Heights /25,
+                height: Heights / 25,
                 child: Container(
                   child: ColorFiltered(
                     colorFilter:
@@ -305,12 +292,11 @@ _pageManager =PageManger();
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                              color:AppColors.shade,
-                              backgroundBlendMode: BlendMode
-                                  .dstOut),
+                              color: AppColors.shade,
+                              backgroundBlendMode: BlendMode.dstOut),
                         ),
                         Container(
-                          margin: const EdgeInsets.only(top:4),
+                          margin: const EdgeInsets.only(top: 4),
                           height: Heights,
                           width: Weights,
                           decoration: BoxDecoration(
