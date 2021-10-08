@@ -5,7 +5,7 @@ import 'package:just_audio/just_audio.dart';
 import 'MusicPages/service_Locator.dart';
 import 'MusicPages/songRepository.dart';
 
-class PageManger {
+class PageManager {
   final _audioPlayer = getIt<AudioHandler>();
   final buttonNotifier = ValueNotifier(ButtonState.paused);
   final progressNotifier = ValueNotifier<ProgressBarState>(
@@ -14,7 +14,7 @@ class PageManger {
 
 
 
-  PageManger() {
+  PageManager() {
     _init();
   }
 

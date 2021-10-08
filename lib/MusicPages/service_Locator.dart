@@ -11,5 +11,5 @@ Future<void> setupServiceLocator() async {
   // page state
   getIt.registerLazySingleton<PlaylistRepository>(() => DemoPlaylist());
 
-  getIt.registerLazySingleton<PageManger>(() => PageManger());
+  getIt.registerLazySingleton<PageManager>(() => PageManager());
 }

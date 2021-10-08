@@ -24,11 +24,11 @@ class SlidePage extends StatefulWidget {
 
 class _SlidePageState extends State<SlidePage> {
 
-  late PageManger _pageManager;
+  late PageManager _pageManager;
   @override
   void initState(){
 super.initState();
-_pageManager =PageManger();
+_pageManager =PageManager();
   }
 
   int play = 0;

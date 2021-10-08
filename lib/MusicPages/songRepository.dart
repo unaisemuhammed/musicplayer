@@ -15,7 +15,7 @@ class DemoPlaylist extends PlaylistRepository {
   Map<String, String> _nextSong() {
     return {
       'id': '1',
-      'title': 'The Heart',
+      'title': 'The Hearts',
       'album': 'SelenaGomez',
       'url':
       'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',

@@ -16,7 +16,7 @@ class MyAudioHandler extends BaseAudioHandler {
   final _player = AudioPlayer();
   final _playlist = ConcatenatingAudioSource(children: []);
   MyAudioHandler() {
-    _loadEmptyPlaylist();
+    _loadEmptyPlaylists();
     _notifyAudioHandlerAboutPlaybackEvents();
     _listenForDurationChanges();
     // _listenForCurrentSongIndexChanges();
@@ -24,7 +24,7 @@ class MyAudioHandler extends BaseAudioHandler {
   }
 
 
-  Future<void> _loadEmptyPlaylist() async {
+  Future<void> _loadEmptyPlaylists() async {
     try {
       await _player.setAudioSource(_playlist);
     } catch (e) {
