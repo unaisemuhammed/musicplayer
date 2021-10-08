@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:musicplayer/MusicPages/MusicControllPage.dart';
 import 'MusicPages/SlidePage.dart';
 import 'package:musicplayer/colors.dart' as AppColors;
 
+import 'MusicPages/service_Locator.dart';
 
-void main() {
+
+void main()async {
+  await setupServiceLocator();
   runApp(MyApp());
 }
 

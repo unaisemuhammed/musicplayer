@@ -1,14 +1,18 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:just_audio/just_audio.dart';
+import 'MusicPages/service_Locator.dart';
+import 'MusicPages/songRepository.dart';
 
 class PageManger {
+  final _audioPlayer = getIt<AudioHandler>();
   final buttonNotifier = ValueNotifier(ButtonState.paused);
   final progressNotifier = ValueNotifier<ProgressBarState>(
     ProgressBarState(current: Duration.zero, total: Duration.zero),
   );
 
-  late AudioPlayer _audioPlayer;
+
 
   PageManger() {
     _init();
@@ -16,11 +20,26 @@ class PageManger {
 
   static const path = 'Assets/Selena2.mp3';
 
-  void _init() async {
-    _audioPlayer = AudioPlayer();
-    await _audioPlayer.setAsset(path);
+  Future<void> _loadPlaylist() async {
+    final songRepository = getIt<PlaylistRepository>();
+    final playlist = await songRepository.addingSongs();
+    final mediaItems = playlist
+        .map((song) => MediaItem(
+      id: song['id'] ?? '',
+      album: song['album'] ?? '',
+      title: song['title'] ?? '',
+      extras: {'url': song['url']},
+    ))
+        .toList();
 
-    _audioPlayer.playerStateStream.listen((playerState) {
+    _audioPlayer.addQueueItems(mediaItems);
+  }
+
+
+  void _init() async {
+    await _loadPlaylist();
+
+    _audioPlayer.playbackState.listen((playerState) {
       final isPlaying = playerState.playing;
       final processingState = playerState.processingState;
       if (!isPlaying) {
@@ -33,7 +52,7 @@ class PageManger {
       }
     });
 
-    _audioPlayer.positionStream.listen((position) {
+    AudioService.position.listen((position) {
       final oldState = progressNotifier.value;
       progressNotifier.value = ProgressBarState(
         current: position,
@@ -41,10 +60,10 @@ class PageManger {
       );
     });
 
-    _audioPlayer.durationStream.listen((totalDuration) {
+    _audioPlayer.mediaItem.listen((mediaItem) {
       final oldState = progressNotifier.value;
       progressNotifier.value = ProgressBarState(
-          current: oldState.current, total: totalDuration ?? Duration.zero);
+        current: oldState.current,   total: mediaItem?.duration ?? Duration.zero,);
     });
   }
 
@@ -58,30 +77,6 @@ class PageManger {
 
   void seek(Duration position) {
     _audioPlayer.seek(position);
-  }
-
-  void playAndPause() {
-    ValueListenableBuilder<ButtonState>(
-      valueListenable: buttonNotifier,
-      builder: (context, value, child) {
-        switch (value) {
-          case ButtonState.paused:
-            return IconButton(
-              iconSize: 35,
-              color: Colors.white,
-              onPressed: _audioPlayer.play,
-              icon: Icon(Icons.play_arrow),
-            );
-          case ButtonState.playing:
-            return IconButton(
-              iconSize: 35,
-              color: Colors.white,
-              onPressed: _audioPlayer.pause,
-              icon: Icon(Icons.pause),
-            );
-        }
-      },
-    );
   }
 }
 

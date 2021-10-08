@@ -6,6 +6,8 @@ import 'package:marquee/marquee.dart';
 import 'package:musicplayer/PageManager.dart';
 import 'package:musicplayer/colors.dart' as AppColors;
 
+import 'SlidePage.dart';
+
 class MusicControll extends StatefulWidget {
   const MusicControll({Key? key}) : super(key: key);
 
@@ -45,16 +47,16 @@ class _MusicControllState extends State<MusicControll> {
           ),
           elevation: 0,
           backgroundColor: AppColors.back,
-          leading: IconButton(
-            padding: EdgeInsets.only(top: 5, left: 10),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.keyboard_arrow_down_rounded,
-              size: 40,
-            ),
-          ),
+          // leading: IconButton(
+          //   padding: EdgeInsets.only(top: 5, left: 10),
+          //   onPressed: () {
+          //     Navigator.pop(context);
+          //   },
+          //   icon: Icon(
+          //     Icons.keyboard_arrow_down_rounded,
+          //     size: 40,
+          //   ),
+          // ),
         ),
         backgroundColor: AppColors.back,
         body: Stack(
