@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:musicplayer/colors.dart' as AppColors;
+import 'package:musicplayer/db/Favourite/db_helper.dart';
+import 'package:musicplayer/db/Favourite/helper.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
 class Favourite extends StatefulWidget {
   const Favourite({Key? key}) : super(key: key);
@@ -9,427 +13,105 @@ class Favourite extends StatefulWidget {
 }
 
 class _FavouriteState extends State<Favourite> {
-  int  favourite=0;
+  int favourite = 0;
+  late DatabaseHandler handler;
+  late final AudioPlayer player;
+  final OnAudioQuery audioQuery = OnAudioQuery();
+
+  @override
+  void initState() {
+    super.initState();
+    handler = DatabaseHandler();
+    player = AudioPlayer();
+    // handler.retrieveUsers();
+  }
+
+  List<SongModel> songs = [];
+
+  void getTracks() async {
+    songs = handler.retrieveUsers() as List<SongModel>;
+  }
+
   @override
   Widget build(BuildContext context) {
-
     final double Heights = MediaQuery.of(context).size.height;
     final double Weights = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
-        backgroundColor: AppColors.back,
+        backgroundColor: AppColors.shade,
         body: Container(
-        padding: EdgeInsets.only(bottom: 60),
-          child: ListView(
-            children: [
-              ListTile(
-                // dense: true,
-                leading: Container(
-                  child: Icon(
-                    Icons.music_note_outlined,
-                    size: 30,
-                    color: Colors.grey,
-                  ),
-                  decoration: BoxDecoration(
-                      color: AppColors.back,
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(10)),
-                  width: Weights / 8,
-                  height: Heights / 14,
-                ),
-                title: Text(
-                  "Ariana Grande - 7 rings (Official Video)",
-                  style: TextStyle(color: Colors.white, fontSize: 17),
-                  overflow: TextOverflow.ellipsis,maxLines: 1,
-                ),subtitle: Text(
-                "ariana Grande",
-                style: TextStyle(color: Colors.grey),
-              ),
-                trailing:IconButton(
-                  iconSize: 25,
-                  color: Colors.white,
-                  onPressed: () {
-                    setState(() {
-                      favourite == 0 ? favourite = 1 : favourite = 0;
-                    });
+          padding: EdgeInsets.only(bottom: 60),
+          child: FutureBuilder(
+            future: this.handler.retrieveUsers(),
+            builder:
+                (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  itemCount: snapshot.data?.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Column(
+                      children: [
+                        ListTile(
+                          leading: QueryArtworkWidget(
+                            artworkBorder: BorderRadius.circular(8),
+                            nullArtworkWidget: Container(
+                                width: Weights / 8,
+                                height: Heights / 14,
+                                decoration: BoxDecoration(
+                                    color: AppColors.back,
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: Icon(
+                                  Icons.music_note_outlined,
+                                  color: Colors.grey,
+                                  size: 45,
+                                )),
+                            id: snapshot.data![index].num,
+                            type: ArtworkType.AUDIO,
+                            artworkFit: BoxFit.contain,
+                          ),
+                          trailing: IconButton(
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                            ),
+                            onPressed: () async {
+                              await this
+                                  .handler
+                                  .deleteUser(snapshot.data![index].id!);
+                              setState(() {
+                                snapshot.data!.remove(snapshot.data![index]);
+                              });
+                            },
+                          ),
+                          onTap: () {
+                            player.setUrl(snapshot.data![index].location);
+                            player.play();
+                          },
+                          title: Text(
+                            snapshot.data![index].name,
+                            style: TextStyle(color: Colors.white, fontSize: 17),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                          subtitle: Text(
+                            "ariana Grande",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                        Divider(
+                          height: 0,
+                          indent: 85,
+                          color: Colors.grey,
+                        ),
+                      ],
+                    );
                   },
-                  icon: favourite == 0
-                      ? Icon(Icons.favorite)
-                      : Icon(Icons.favorite_border),
-                ),
-              ),
-              Divider(
-                height: 0,
-                indent: 85,
-                color: Colors.grey,
-              ),ListTile(
-                // dense: true,
-                leading: Container(
-                  child: Icon(
-                    Icons.music_note_outlined,
-                    size: 30,
-                    color: Colors.grey,
-                  ),
-                  decoration: BoxDecoration(
-                      color: AppColors.back,
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(10)),
-                  width: Weights / 8,
-                  height: Heights / 14,
-                ),
-                title: Text(
-                  "Ariana Grande - 7 rings (Official Video)",
-                  style: TextStyle(color: Colors.white, fontSize: 17),
-                  overflow: TextOverflow.ellipsis,maxLines: 1,
-                ),subtitle: Text(
-                "ariana Grande",
-                style: TextStyle(color: Colors.grey),
-              ),
-                trailing:IconButton(
-                  iconSize: 25,
-                  color: Colors.white,
-                  onPressed: () {
-                    setState(() {
-                      favourite == 0 ? favourite = 1 : favourite = 0;
-                    });
-                  },
-                  icon: favourite == 0
-                      ? Icon(Icons.favorite)
-                      : Icon(Icons.favorite_border),
-                ),
-              ),
-              Divider(
-                height: 0,
-                indent: 85,
-                color: Colors.grey,
-              ),ListTile(
-                // dense: true,
-                leading: Container(
-                  child: Icon(
-                    Icons.music_note_outlined,
-                    size: 30,
-                    color: Colors.grey,
-                  ),
-                  decoration: BoxDecoration(
-                      color: AppColors.back,
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(10)),
-                  width: Weights / 8,
-                  height: Heights / 14,
-                ),
-                title: Text(
-                  "Ariana Grande - 7 rings (Official Video)",
-                  style: TextStyle(color: Colors.white, fontSize: 17),
-                  overflow: TextOverflow.ellipsis,maxLines: 1,
-                ),subtitle: Text(
-                "ariana Grande",
-                style: TextStyle(color: Colors.grey),
-              ),
-                trailing:IconButton(
-                  iconSize: 25,
-                  color: Colors.white,
-                  onPressed: () {
-                    setState(() {
-                      favourite == 0 ? favourite = 1 : favourite = 0;
-                    });
-                  },
-                  icon: favourite == 0
-                      ? Icon(Icons.favorite)
-                      : Icon(Icons.favorite_border),
-                ),
-              ),
-              Divider(
-                height: 0,
-                indent: 85,
-                color: Colors.grey,
-              ),ListTile(
-                // dense: true,
-                leading: Container(
-                  child: Icon(
-                    Icons.music_note_outlined,
-                    size: 30,
-                    color: Colors.grey,
-                  ),
-                  decoration: BoxDecoration(
-                      color: AppColors.back,
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(10)),
-                  width: Weights / 8,
-                  height: Heights / 14,
-                ),
-                title: Text(
-                  "Ariana Grande - 7 rings (Official Video)",
-                  style: TextStyle(color: Colors.white, fontSize: 17),
-                  overflow: TextOverflow.ellipsis,maxLines: 1,
-                ),subtitle: Text(
-                "ariana Grande",
-                style: TextStyle(color: Colors.grey),
-              ),
-                trailing:IconButton(
-                  iconSize: 25,
-                  color: Colors.white,
-                  onPressed: () {
-                    setState(() {
-                      favourite == 0 ? favourite = 1 : favourite = 0;
-                    });
-                  },
-                  icon: favourite == 0
-                      ? Icon(Icons.favorite)
-                      : Icon(Icons.favorite_border),
-                ),
-              ),
-              Divider(
-                height: 0,
-                indent: 85,
-                color: Colors.grey,
-              ),ListTile(
-                // dense: true,
-                leading: Container(
-                  child: Icon(
-                    Icons.music_note_outlined,
-                    size: 30,
-                    color: Colors.grey,
-                  ),
-                  decoration: BoxDecoration(
-                      color: AppColors.back,
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(10)),
-                  width: Weights / 8,
-                  height: Heights / 14,
-                ),
-                title: Text(
-                  "Ariana Grande - 7 rings (Official Video)",
-                  style: TextStyle(color: Colors.white, fontSize: 17),
-                  overflow: TextOverflow.ellipsis,maxLines: 1,
-                ),subtitle: Text(
-                "ariana Grande",
-                style: TextStyle(color: Colors.grey),
-              ),
-                trailing:IconButton(
-                  iconSize: 25,
-                  color: Colors.white,
-                  onPressed: () {
-                    setState(() {
-                      favourite == 0 ? favourite = 1 : favourite = 0;
-                    });
-                  },
-                  icon: favourite == 0
-                      ? Icon(Icons.favorite)
-                      : Icon(Icons.favorite_border),
-                ),
-              ),
-              Divider(
-                height: 0,
-                indent: 85,
-                color: Colors.grey,
-              ),ListTile(
-                // dense: true,
-                leading: Container(
-                  child: Icon(
-                    Icons.music_note_outlined,
-                    size: 30,
-                    color: Colors.grey,
-                  ),
-                  decoration: BoxDecoration(
-                      color: AppColors.back,
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(10)),
-                  width: Weights / 8,
-                  height: Heights / 14,
-                ),
-                title: Text(
-                  "Ariana Grande - 7 rings (Official Video)",
-                  style: TextStyle(color: Colors.white, fontSize: 17),
-                  overflow: TextOverflow.ellipsis,maxLines: 1,
-                ),subtitle: Text(
-                "ariana Grande",
-                style: TextStyle(color: Colors.grey),
-              ),
-                trailing:IconButton(
-                  iconSize: 25,
-                  color: Colors.white,
-                  onPressed: () {
-                    setState(() {
-                      favourite == 0 ? favourite = 1 : favourite = 0;
-                    });
-                  },
-                  icon: favourite == 0
-                      ? Icon(Icons.favorite)
-                      : Icon(Icons.favorite_border),
-                ),
-              ),
-              Divider(
-                height: 0,
-                indent: 85,
-                color: Colors.grey,
-              ),ListTile(
-                // dense: true,
-                leading: Container(
-                  child: Icon(
-                    Icons.music_note_outlined,
-                    size: 30,
-                    color: Colors.grey,
-                  ),
-                  decoration: BoxDecoration(
-                      color: AppColors.back,
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(10)),
-                  width: Weights / 8,
-                  height: Heights / 14,
-                ),
-                title: Text(
-                  "Ariana Grande - 7 rings (Official Video)",
-                  style: TextStyle(color: Colors.white, fontSize: 17),
-                  overflow: TextOverflow.ellipsis,maxLines: 1,
-                ),subtitle: Text(
-                "ariana Grande",
-                style: TextStyle(color: Colors.grey),
-              ),
-                trailing:IconButton(
-                  iconSize: 25,
-                  color: Colors.white,
-                  onPressed: () {
-                    setState(() {
-                      favourite == 0 ? favourite = 1 : favourite = 0;
-                    });
-                  },
-                  icon: favourite == 0
-                      ? Icon(Icons.favorite)
-                      : Icon(Icons.favorite_border),
-                ),
-              ),
-              Divider(
-                height: 0,
-                indent: 85,
-                color: Colors.grey,
-              ),ListTile(
-                // dense: true,
-                leading: Container(
-                  child: Icon(
-                    Icons.music_note_outlined,
-                    size: 30,
-                    color: Colors.grey,
-                  ),
-                  decoration: BoxDecoration(
-                      color: AppColors.back,
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(10)),
-                  width: Weights / 8,
-                  height: Heights / 14,
-                ),
-                title: Text(
-                  "Ariana Grande - 7 rings (Official Video)",
-                  style: TextStyle(color: Colors.white, fontSize: 17),
-                  overflow: TextOverflow.ellipsis,maxLines: 1,
-                ),subtitle: Text(
-                "ariana Grande",
-                style: TextStyle(color: Colors.grey),
-              ),
-                trailing:IconButton(
-                  iconSize: 25,
-                  color: Colors.white,
-                  onPressed: () {
-                    setState(() {
-                      favourite == 0 ? favourite = 1 : favourite = 0;
-                    });
-                  },
-                  icon: favourite == 0
-                      ? Icon(Icons.favorite)
-                      : Icon(Icons.favorite_border),
-                ),
-              ),
-              Divider(
-                height: 0,
-                indent: 85,
-                color: Colors.grey,
-              ),ListTile(
-                // dense: true,
-                leading: Container(
-                  child: Icon(
-                    Icons.music_note_outlined,
-                    size: 30,
-                    color: Colors.grey,
-                  ),
-                  decoration: BoxDecoration(
-                      color: AppColors.back,
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(10)),
-                  width: Weights / 8,
-                  height: Heights / 14,
-                ),
-                title: Text(
-                  "Ariana Grande - 7 rings (Official Video)",
-                  style: TextStyle(color: Colors.white, fontSize: 17),
-                  overflow: TextOverflow.ellipsis,maxLines: 1,
-                ),subtitle: Text(
-                "ariana Grande",
-                style: TextStyle(color: Colors.grey),
-              ),
-                trailing:IconButton(
-                  iconSize: 25,
-                  color: Colors.white,
-                  onPressed: () {
-                    setState(() {
-                      favourite == 0 ? favourite = 1 : favourite = 0;
-                    });
-                  },
-                  icon: favourite == 0
-                      ? Icon(Icons.favorite)
-                      : Icon(Icons.favorite_border),
-                ),
-              ),
-              Divider(
-                height: 0,
-                indent: 85,
-                color: Colors.grey,
-              ),ListTile(
-                // dense: true,
-                leading: Container(
-                  child: Icon(
-                    Icons.music_note_outlined,
-                    size: 30,
-                    color: Colors.grey,
-                  ),
-                  decoration: BoxDecoration(
-                      color: AppColors.back,
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(10)),
-                  width: Weights / 8,
-                  height: Heights / 14,
-                ),
-                title: Text(
-                  "Ariana Grande - 7 rings (Official Video)",
-                  style: TextStyle(color: Colors.white, fontSize: 17),
-                  overflow: TextOverflow.ellipsis,maxLines: 1,
-                ),subtitle: Text(
-                "ariana Grande",
-                style: TextStyle(color: Colors.grey),
-              ),
-                trailing:IconButton(
-                  iconSize: 25,
-                  color: Colors.white,
-                  onPressed: () {
-                    setState(() {
-                      favourite == 0 ? favourite = 1 : favourite = 0;
-                    });
-                  },
-                  icon: favourite == 0
-                      ? Icon(Icons.favorite)
-                      : Icon(Icons.favorite_border),
-                ),
-              ),
-              Divider(
-                height: 0,
-                indent: 85,
-                color: Colors.grey,
-              ),
-            ],
+                );
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
           ),
-          decoration: BoxDecoration(
-              // color: AppColors.shade,
-              color: AppColors.shade),
-          height: Heights,
-          width: Weights,
         ),
       ),
     );

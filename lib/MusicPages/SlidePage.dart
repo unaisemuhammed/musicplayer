@@ -1,14 +1,19 @@
+import 'package:animations/animations.dart';
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 import 'package:musicplayer/MusicPages/MusicControllPage.dart';
 import 'package:musicplayer/MusicPages/SettingsPage.dart';
+import 'package:musicplayer/PageManager.dart';
+import 'BottomBar.dart';
 import 'FavouritePage.dart';
 import 'FolderPage.dart';
 import 'PlaylistPage.dart';
 import 'SearchPage.dart';
 import 'TrackPage.dart';
 import 'package:musicplayer/colors.dart' as AppColors;
+
 
 var _pages = [Playlist(), Track(), Favourite(), Folder()];
 List Title = ["Playlist", "Track", "Favourite", "Folder"];
@@ -21,9 +26,12 @@ class SlidePage extends StatefulWidget {
 }
 
 class _SlidePageState extends State<SlidePage> {
+  var _audioPlayer;
+  late final PageManager _pageManager;
   @override
-  void initState() {
-    super.initState();
+  void initState(){
+super.initState();
+_pageManager =PageManager();
   }
 
   int play = 0;
@@ -43,9 +51,7 @@ class _SlidePageState extends State<SlidePage> {
             bottom: TabBar(
               dragStartBehavior: DragStartBehavior.down,
               tabs: [
-                Tab(
-                  text: "Playlist",
-                ),
+                Tab(text: "Playlist",),
                 Tab(
                   text: "Track",
                 ),
@@ -55,17 +61,12 @@ class _SlidePageState extends State<SlidePage> {
                 Tab(
                   text: "Folder",
                 ),
-              ],
-              indicatorColor: Colors.white70,
+              ],indicatorColor:Colors.white70,
               unselectedLabelColor: Colors.white60,
-              unselectedLabelStyle:
-                  TextStyle(fontSize: 16, fontFamily: "Titil"),
-              labelStyle: TextStyle(
-                  fontSize: 18,
-                  fontFamily: "Titil",
-                  fontWeight: FontWeight.w500),
+              unselectedLabelStyle: TextStyle(fontSize: 16,fontFamily: "Titil"),
+              labelStyle: TextStyle(fontSize: 18,fontFamily: "Titil",fontWeight: FontWeight.w500),
             ),
-            toolbarHeight: 110,
+            toolbarHeight: 70,
             elevation: 0,
             actions: [
               IconButton(
@@ -175,114 +176,17 @@ class _SlidePageState extends State<SlidePage> {
               /// ///////MusicBottomBar/////// ///
               Positioned(
                 bottom: Heights / 100,
-                right: 5,
-                left: 5,
+                right: 7,
+                left: 7,
                 height: Heights / 13,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MusicControll(),
-                        ));
-                  },
-                  child: Container(
-                    child: Row(
-                      // mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              color: AppColors.shade,
-                              borderRadius: BorderRadius.circular(50)),
-                          child: IconButton(
-                            iconSize: 30,
-                            alignment: Alignment.centerLeft,
-                            color: Colors.black,
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MusicControll(),
-                                ),
-                              );
-                            },
-                            icon: Icon(
-                              Icons.music_note_outlined,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Expanded(
-                          child: Marquee(
-                            blankSpace: 100,
-                            text:
-                                'Selena Gomez - The Heart Wants What It Wants (Official Video)',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontFamily: "Titil"),
-                          ),
-                        ),
-                        // SizedBox(
-                        //   width: 5,
-                        // ),
-                        IconButton(
-                          iconSize: 30,
-                          alignment: Alignment.centerRight,
-                          color: Colors.white,
-                          onPressed: () {},
-                          icon: Icon(Icons.skip_previous_sharp),
-                        ),
-                        IconButton(
-                          iconSize: 30,
-                          color: Colors.white,
-                          onPressed: () {},
-                          icon: Icon(Icons.play_arrow),
-                        ),
-                        IconButton(
-                          iconSize: 30,
-                          alignment: Alignment.centerRight,
-                          color: Colors.white,
-                          onPressed: () {},
-                          icon: Icon(Icons.skip_next),
-                        ),
-                        IconButton(
-                          iconSize: 25,
-                          alignment: Alignment.centerRight,
-                          color: Colors.white,
-                          onPressed: () {
-                            setState(() {
-                              favourite == 0 ? favourite = 1 : favourite = 0;
-                            });
-                          },
-                          icon: favourite == 0
-                              ? Icon(Icons.favorite_border)
-                              : Icon(Icons.favorite),
-                        ),
-                      ],
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: AppColors.back,
-                    ),
-                    height: Heights,
-                    width: Weights,
-                  ),
-                ),
+                child: BottomBar()
               ),
-
               ///ShadedPart///
               Positioned(
                 top: Heights / 2000,
                 right: 0,
                 left: 0,
-                height: Heights / 25,
+                height: Heights /25,
                 child: Container(
                   child: ColorFiltered(
                     colorFilter:
@@ -292,11 +196,12 @@ class _SlidePageState extends State<SlidePage> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                              color: AppColors.shade,
-                              backgroundBlendMode: BlendMode.dstOut),
+                              color:AppColors.shade,
+                              backgroundBlendMode: BlendMode
+                                  .dstOut),
                         ),
                         Container(
-                          margin: const EdgeInsets.only(top: 4),
+                          margin: const EdgeInsets.only(top:4),
                           height: Heights,
                           width: Weights,
                           decoration: BoxDecoration(
@@ -319,3 +224,21 @@ class _SlidePageState extends State<SlidePage> {
     );
   }
 }
+
+
+
+
+// import 'package:audio_service/audio_service.dart';
+// import 'package:get_it/get_it.dart';
+// import 'PageManager.dart';
+// import 'audioHandler.dart';
+// GetIt getIt = GetIt.instance;
+// Future<void> setupServiceLocator() async {
+//   // services
+//   getIt.registerSingleton<AudioHandler>(await initAudioService());
+//   // page state
+//   getIt.registerLazySingleton<PageManager>(() => PageManager());
+// }
+
+
+

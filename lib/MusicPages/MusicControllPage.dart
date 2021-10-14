@@ -15,13 +15,13 @@ class MusicControll extends StatefulWidget {
 
 class _MusicControllState extends State<MusicControll> {
   var _audioPlayer;
-  late final PageManger _pageManager;
+  late final PageManager _pageManager;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _pageManager = PageManger();
+    _pageManager = PageManager();
   }
 
   @override
