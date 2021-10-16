@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:musicplayer/colors.dart' as AppColors;
 
-class Settigs extends StatefulWidget {
-  const Settigs({Key? key}) : super(key: key);
+class Settings extends StatefulWidget {
+  const Settings({Key? key}) : super(key: key);
 
   @override
   _SettingsState createState() => _SettingsState();
 }
 
-class _SettingsState extends State<Settigs> {
+class _SettingsState extends State<Settings> {
   int screen = 0;
   int controllMusic = 0;
 

@@ -1,9 +1,5 @@
-import 'package:animations/animations.dart';
-import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:marquee/marquee.dart';
-import 'package:musicplayer/MusicPages/MusicControllPage.dart';
 import 'package:musicplayer/MusicPages/SettingsPage.dart';
 import 'package:musicplayer/PageManager.dart';
 import 'BottomBar.dart';
@@ -69,69 +65,69 @@ _pageManager =PageManager();
             toolbarHeight: 70,
             elevation: 0,
             actions: [
-              IconButton(
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text(
-                            "Create Playlist",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 23,
-                                fontFamily: "Titil",
-                                fontWeight: FontWeight.w700),
-                          ),
-                          content: TextField(
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                          actions: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Container(
-                                  alignment: Alignment.bottomLeft,
-                                  child: TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text(
-                                      "Cancel",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontFamily: "Titil"),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  alignment: Alignment.bottomRight,
-                                  child: TextButton(
-                                    onPressed: () {},
-                                    child: Text(
-                                      "Create",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontFamily: "Titil"),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          backgroundColor: AppColors.back,
-                        );
-                      });
-                  print(playlistController);
-                },
-                icon: Icon(Icons.playlist_add),
-              ),
+              // IconButton(
+              //   onPressed: () {
+              //     showDialog(
+              //         context: context,
+              //         builder: (context) {
+              //           return AlertDialog(
+              //             title: Text(
+              //               "Create Playlist",
+              //               style: TextStyle(
+              //                   color: Colors.white,
+              //                   fontSize: 23,
+              //                   fontFamily: "Titil",
+              //                   fontWeight: FontWeight.w700),
+              //             ),
+              //             content: TextField(
+              //               style: TextStyle(
+              //                 color: Colors.white,
+              //               ),
+              //             ),
+              //             actions: [
+              //               Row(
+              //                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //                 children: [
+              //                   Container(
+              //                     alignment: Alignment.bottomLeft,
+              //                     child: TextButton(
+              //                       onPressed: () {
+              //                         Navigator.pop(context);
+              //                       },
+              //                       child: Text(
+              //                         "Cancel",
+              //                         style: TextStyle(
+              //                             color: Colors.white,
+              //                             fontSize: 20,
+              //                             fontFamily: "Titil"),
+              //                       ),
+              //                     ),
+              //                   ),
+              //                   Container(
+              //                     alignment: Alignment.bottomRight,
+              //                     child: TextButton(
+              //                       onPressed: () {},
+              //                       child: Text(
+              //                         "Create",
+              //                         style: TextStyle(
+              //                             color: Colors.white,
+              //                             fontSize: 20,
+              //                             fontFamily: "Titil"),
+              //                       ),
+              //                     ),
+              //                   )
+              //                 ],
+              //               ),
+              //             ],
+              //             shape: RoundedRectangleBorder(
+              //                 borderRadius: BorderRadius.circular(20)),
+              //             backgroundColor: AppColors.back,
+              //           );
+              //         });
+              //     print(playlistController);
+              //   },
+              //   icon: Icon(Icons.playlist_add),
+              // ),
               IconButton(
                 onPressed: () {
                   Navigator.push(
@@ -149,7 +145,7 @@ _pageManager =PageManager();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Settigs(),
+                        builder: (context) => Settings(),
                       ),
                     );
                   },

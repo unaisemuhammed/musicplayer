@@ -5,6 +5,8 @@ import 'package:musicplayer/db/Favourite/db_helper.dart';
 import 'package:musicplayer/db/Favourite/helper.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
+import '../PageManager.dart';
+
 class Favourite extends StatefulWidget {
   const Favourite({Key? key}) : super(key: key);
 
@@ -14,19 +16,25 @@ class Favourite extends StatefulWidget {
 
 class _FavouriteState extends State<Favourite> {
   int favourite = 0;
+  dynamic songs = [];
   late DatabaseHandler handler;
   late final AudioPlayer player;
   final OnAudioQuery audioQuery = OnAudioQuery();
+  late PageManager _pageManager;
 
   @override
   void initState() {
     super.initState();
+    _pageManager = PageManager();
+    addSongToPageManager(songs);
     handler = DatabaseHandler();
     player = AudioPlayer();
     // handler.retrieveUsers();
   }
 
-  List<SongModel> songs = [];
+  Future<dynamic> addSongToPageManager(songs) async{
+    return await _pageManager.loadPlaylist(songs);
+  }
 
   void getTracks() async {
     songs = handler.retrieveUsers() as List<SongModel>;
@@ -84,8 +92,12 @@ class _FavouriteState extends State<Favourite> {
                             },
                           ),
                           onTap: () {
-                            player.setUrl(snapshot.data![index].location);
-                            player.play();
+                            // player.setUrl(snapshot.data![index].location);
+                            // player.play();
+                            songs = snapshot.data![index].location;
+                            addSongToPageManager(songs);
+                            _pageManager.play();
+
                           },
                           title: Text(
                             snapshot.data![index].name,

@@ -6,6 +6,7 @@ import 'package:musicplayer/servicer.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'MusicPages/TrackPage.dart';
 import 'Songs.dart';
+import 'db/Favourite/helper.dart';
 
 
 class PageManager extends Track {
@@ -20,32 +21,44 @@ class PageManager extends Track {
   }
 
   // void init({required SongModel songInfo});
-  static const path = 'Assets/Selena2.mp3';
   final OnAudioQuery audioQuery = OnAudioQuery();
-  List<SongModel> songs = [];
+  DatabaseHandler? handler;
+  dynamic songs;
   int index=1;
 
-  Future<void> _loadPlaylist() async {
-    final songRepository = getIt<PlaylistRepository>();
-    final playlist = await songRepository.addingSongs();
-    final mediaItems = playlist
-        .map((song) =>
-        MediaItem(
-          id: '2',
-          album: 'Unu',
-          title: 'Unaise',
-          extras: {'url':"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3"},
-        ))
-        .toList();
-
+  Future<void> loadPlaylist(songs) async {
+    songs = songs;
+    final playlist = await handler!.retrieveUsers();
+    final mediaItems = playlist.map((song) => MediaItem(
+      id: '2',
+      album: 'Unu',
+      title: 'Unaise',
+      extras: {'url': songs},
+    )).toList();
     _audioPlayer.addQueueItems(mediaItems);
+    // play();
   }
+
+  // Future<void> _loadPlaylist() async {
+  //   final songRepository = getIt<PlaylistRepository>();
+  //   final playlist = await songRepository.addingSongs();
+  //   final mediaItems = playlist
+  //       .map((song) =>
+  //       MediaItem(
+  //         id: '2',
+  //         album: 'Unu',
+  //         title: 'Unaise',
+  //         extras: {'url':"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3"},
+  //       ))
+  //       .toList();
+  //
+  //   _audioPlayer.addQueueItems(mediaItems);
+  // }
 
 
   void _init() async {
-    await _loadPlaylist();
-
-
+    handler = DatabaseHandler();
+    await loadPlaylist(songs);
     songs = await audioQuery.querySongs();
 
 

@@ -19,7 +19,7 @@ class TrackState extends State<Track> {
 
   late final AudioPlayer player;
 
-  List<SongModel> songs = [];
+  List<SongModel> Tracks = [];
 
   int currentIndex = 0;
 
@@ -27,17 +27,21 @@ class TrackState extends State<Track> {
   dynamic songTitle;
   dynamic songId;
   dynamic songLocation;
-
   PageManager? _pageManager;
+
 
   DatabaseHandler? handler;
 
   void initState() {
+    requestPermission();
     _pageManager = PageManager();
     super.initState();
     player = AudioPlayer();
     getTracks();
     handler = DatabaseHandler();
+   setState(() {
+     requestPermission();
+   });
     addUsers(songTitle, songId, songLocation);
   }
 
@@ -62,9 +66,9 @@ class TrackState extends State<Track> {
   }
 
   void getTracks() async {
-    songs = await audioQuery.querySongs();
+    Tracks = await audioQuery.querySongs();
     setState(() {
-      songs = songs;
+      Tracks = Tracks;
     });
   }
 
@@ -77,21 +81,20 @@ class TrackState extends State<Track> {
       body: Container(
         padding: EdgeInsets.only(bottom: 60),
         child: ListView.builder(
-            itemCount: songs.length,
+            itemCount: Tracks.length,
             itemBuilder: (BuildContext context, int index) {
-              if (songs[index].data.contains("mp3"))
+              if (Tracks[index].data.contains("mp3"))
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     GestureDetector(
                       onTap: () {
-                        player.setUrl(songs[index].data);
-                        currentIndex = index;
-                        player.play();
-                        // Navigator.of(context).push(MaterialPageRoute(
-                        //     builder: (context) => MusicPlayerScreen(
-                        //           songInfo: songs[currentIndex],
-                        //         )));
+                        // player.setUrl(Tracks[index].data);
+                        // currentIndex = index;
+                        // player.play();
+                        dynamic songs = Tracks[index].data;
+                        _pageManager!.loadPlaylist(songs);
+                        _pageManager!.play();
                       },
                       child: ListTile(
                         leading: QueryArtworkWidget(
@@ -107,18 +110,18 @@ class TrackState extends State<Track> {
                                 color: Colors.grey,
                                 size: 45,
                               )),
-                          id: songs[index].id,
+                          id: Tracks[index].id,
                           type: ArtworkType.AUDIO,
                           artworkFit: BoxFit.contain,
                         ),
                         title: Text(
-                          songs[index].title,
+                          Tracks[index].title,
                           style: TextStyle(color: Colors.white, fontSize: 17),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),
                         subtitle: Text(
-                          "ariana Grande",
+                          Tracks[index].displayNameWOExt,
                           style: TextStyle(color: Colors.grey),
                         ),
                         trailing: PopupMenuButton(
@@ -141,23 +144,24 @@ class TrackState extends State<Track> {
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     onTap: () {
+                                      player.setUrl(Tracks[index].data);
                                       setState(() {
-                                        songTitle = songs[index].title;
-                                        songId = songs[index].id;
-                                        songLocation = songs[index].data;
-                                        addUsers(
-                                            songTitle, songId, songLocation);
+                                        songTitle = Tracks[index].title;
+                                        songId = Tracks[index].id;
+                                        songLocation = Tracks[index].data;
+                                        addUsers(songTitle, songId,
+                                            songLocation);
                                       });
                                     },
                                     value: 2,
                                   ),
                                   PopupMenuItem(
                                     child: Text(
-                                      "Add to Favourite",
+                                      "Stop",
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     onTap: () {
-                                      player.setUrl(songs[index].data);
+                                      player.setUrl(Tracks[index].data);
                                       currentIndex = index;
                                       player.stop();
                                     },
